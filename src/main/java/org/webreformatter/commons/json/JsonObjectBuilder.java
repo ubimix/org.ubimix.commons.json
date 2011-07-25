@@ -3,22 +3,15 @@
  */
 package org.webreformatter.commons.json;
 
-import java.util.Stack;
 
 /**
  * This class is used to convert JSON to Java objects and vice versa.
  * 
  * @author kotelnikov
  */
-public class JsonObjectBuilder implements IJsonListener {
+public class JsonObjectBuilder extends AbstractObjectBuilder {
 
     private IJsonAccessor fAccessor;
-
-    private Stack<Object> fStack = new Stack<Object>();
-
-    private Object fTop;
-
-    private Object fValue;
 
     public JsonObjectBuilder() {
         this(JsonAccessor.getInstance());
@@ -28,48 +21,15 @@ public class JsonObjectBuilder implements IJsonListener {
         fAccessor = accessor;
     }
 
-    public void beginArray() {
-        Object array = fAccessor.newArray();
-        if (fTop == null) {
-            fTop = array;
-        }
-        fStack.push(array);
+    @Override
+    protected void addObjectValue(Object obj, String property, Object value) {
+        fAccessor.setValue(obj, property, value);
     }
 
-    public void beginArrayElement() {
-        fValue = null;
-    }
-
-    public void beginObject() {
-        Object object = fAccessor.newObject();
-        if (fTop == null) {
-            fTop = object;
-        }
-        fStack.push(object);
-    }
-
-    public void beginObjectProperty(String property) {
-    }
-
-    public void endArray() {
-        fValue = fStack.pop();
-    }
-
-    public void endArrayElement() {
-        Object array = fStack.peek();
+    @Override
+    protected void addToArray(Object array, Object value) {
         int size = fAccessor.getArraySize(array);
-        fAccessor.setArrayValue(array, size, fValue);
-        fValue = null;
-    }
-
-    public void endObject() {
-        fValue = fStack.pop();
-    }
-
-    public void endObjectProperty(String property) {
-        Object obj = fStack.peek();
-        fAccessor.setValue(obj, property, fValue);
-        fValue = null;
+        fAccessor.setArrayValue(array, size, value);
     }
 
     @Override
@@ -81,14 +41,7 @@ public class JsonObjectBuilder implements IJsonListener {
             return false;
         }
         JsonObjectBuilder o = (JsonObjectBuilder) obj;
-        return fAccessor.equals(o.fAccessor)
-            && (fTop != null && o.fTop != null
-                ? fTop.equals(o.fTop)
-                : fTop == o.fTop);
-    }
-
-    public Object getTop() {
-        return fTop;
+        return fAccessor.equals(o.fAccessor) && super.equals(obj);
     }
 
     @Override
@@ -96,35 +49,19 @@ public class JsonObjectBuilder implements IJsonListener {
         return super.hashCode();
     }
 
-    public void onValue(boolean value) {
-        fValue = value;
-    }
-
-    public void onValue(double value) {
-        fValue = value;
-    }
-
-    public void onValue(int value) {
-        fValue = value;
-    }
-
-    public void onValue(long value) {
-        fValue = value;
-    }
-
-    public void onValue(String value) {
-        fValue = value;
-    }
-
-    public void reset() {
-        fStack.clear();
-        fTop = null;
-        fValue = null;
+    @Override
+    protected Object newArray() {
+        return fAccessor.newArray();
     }
 
     @Override
-    public String toString() {
-        return fAccessor.toString(fTop);
+    protected Object newObject() {
+        return fAccessor.newObject();
+    }
+
+    @Override
+    protected String toString(Object top) {
+        return top.toString();
     }
 
 }
