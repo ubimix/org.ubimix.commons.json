@@ -21,6 +21,29 @@ public class JsonObject extends JsonValue {
         return FACTORY.newValue(o);
     }
 
+    public static String resolve(JsonObject object, String pattern) {
+        StringBuilder buf = new StringBuilder();
+        if (pattern != null) {
+            String[] segments = pattern.split("[\\/]");
+            for (String segment : segments) {
+                if (buf.length() > 0) {
+                    buf.append("/");
+                }
+                String[] parts = segment.split("[{}]");
+                for (int i = 0; i < parts.length; i++) {
+                    String part = parts[i];
+                    if ((i % 2) == 0) {
+                        buf.append(part);
+                    } else {
+                        String value = object.getString(part);
+                        buf.append(value);
+                    }
+                }
+            }
+        }
+        return buf.toString();
+    }
+
     public JsonObject() {
         super((Object) null);
     }
