@@ -43,6 +43,15 @@ public abstract class JsonValue {
     };
 
     /**
+     * Transforms the given value to double.
+     */
+    public static final IJsonValueFactory<Double> DOUBLE_FACTORY = new IJsonValueFactory<Double>() {
+        public Double newValue(Object object) {
+            return fAccessor.toDouble(object);
+        }
+    };
+
+    /**
      * Internal field.
      */
     protected static IJsonAccessor fAccessor = JsonAccessor.getInstance();
