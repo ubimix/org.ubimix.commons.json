@@ -32,6 +32,28 @@ public class RpcResponse extends RpcObject {
     public final static String KEY_RESULT = "result";
 
     /**
+     * Checks the given JSON object and returns <code>true</code> if it can be
+     * interpreted as an RPC response.
+     * 
+     * @param obj the object to analyze
+     * @return <code>true</code> if the given object can be interpreted as an
+     *         RPC response.
+     */
+    public static boolean isRpcResponse(JsonObject obj) {
+        Object id = obj.getObject(KEY_ID, JsonValue.NULL_FACTORY);
+        boolean result = false;
+        if (id != null) {
+            Object v = obj.getObject(KEY_RESULT, JsonValue.NULL_FACTORY);
+            result = v != null;
+            if (!result) {
+                v = obj.getObject(KEY_ERROR, JsonValue.NULL_FACTORY);
+                result = v != null;
+            }
+        }
+        return result;
+    }
+
+    /**
      * The default constructor;
      * 
      * @param request
@@ -128,10 +150,10 @@ public class RpcResponse extends RpcObject {
      * @param message a human-readable message describing the error.
      * @return this object
      */
-    public RpcResponse setError(int code, String message) {
+    public <T extends RpcResponse> T setError(int code, String message) {
         RpcError error = new RpcError(code, message);
         setError(error);
-        return this;
+        return cast();
     }
 
     /**
@@ -140,17 +162,9 @@ public class RpcResponse extends RpcObject {
      * @param error the error to set
      * @return this object
      */
-    public RpcResponse setError(RpcError error) {
+    public <T extends RpcResponse> T setError(RpcError error) {
         setValue(KEY_ERROR, error);
-        return this;
-    }
-
-    /**
-     * @see org.webreformatter.commons.json.rpc.RpcObject#setId(java.lang.Object)
-     */
-    @Override
-    public RpcResponse setId(Object id) {
-        return (RpcResponse) super.setId(id);
+        return cast();
     }
 
     /**
@@ -159,9 +173,9 @@ public class RpcResponse extends RpcObject {
      * @param result the result of the call
      * @return this object
      */
-    public RpcResponse setResult(Object result) {
+    public <T extends RpcResponse> T setResult(Object result) {
         setValue(KEY_RESULT, result);
-        return this;
+        return cast();
     }
 
     /**
@@ -170,10 +184,10 @@ public class RpcResponse extends RpcObject {
      * @param values resulting values to set
      * @return this object
      */
-    public RpcResponse setResultArray(Object... values) {
+    public <T extends RpcResponse> T setResultArray(Object... values) {
         JsonArray array = toJsonArray(values);
         setResult(array);
-        return this;
+        return cast();
     }
 
     /**
@@ -183,15 +197,9 @@ public class RpcResponse extends RpcObject {
      * @param values key/value pairs
      * @return this object
      */
-    public RpcResponse setResultObject(Object... values) {
+    public <T extends RpcResponse> T setResultObject(Object... values) {
         JsonObject array = toJsonObject(values);
         setResult(array);
-        return this;
+        return cast();
     }
-
-    @Override
-    public RpcResponse setVersion(String version) {
-        return (RpcResponse) super.setVersion(version);
-    }
-
 }

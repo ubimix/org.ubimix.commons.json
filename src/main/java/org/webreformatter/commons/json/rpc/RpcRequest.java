@@ -26,6 +26,19 @@ public class RpcRequest extends RpcObject {
     private static final String KEY_PARAMS = "params";
 
     /**
+     * Checks the given JSON object and returns <code>true</code> if it can be
+     * interpreted as an RPC request.
+     * 
+     * @param obj the object to analyze
+     * @return <code>true</code> if the given object can be interpreted as an
+     *         RPC request.
+     */
+    public static boolean isRpcRequest(JsonObject obj) {
+        String method = obj.getString(KEY_METHOD);
+        return method != null;
+    }
+
+    /**
      * Default constructor.
      */
     public RpcRequest() {
@@ -120,9 +133,15 @@ public class RpcRequest extends RpcObject {
         return null;
     }
 
-    @Override
-    public RpcRequest setId(Object id) {
-        return (RpcRequest) super.setId(id);
+    /**
+     * Returns <code>true</code> if it is a notification call (ie this call does
+     * not require responses).
+     * 
+     * @return <code>true</code> if this is a notification call
+     */
+    public boolean isNotification() {
+        Object id = getId();
+        return id == null;
     }
 
     /**
@@ -131,9 +150,9 @@ public class RpcRequest extends RpcObject {
      * @param method the name of the called method
      * @return this object
      */
-    public RpcRequest setMethod(String method) {
+    public <T extends RpcRequest> T setMethod(String method) {
         setValue(KEY_METHOD, method);
-        return this;
+        return cast();
     }
 
     /**
@@ -144,10 +163,10 @@ public class RpcRequest extends RpcObject {
      * @param params parameter values to set
      * @return this object
      */
-    public RpcRequest setParamObject(Object... params) {
+    public <T extends RpcRequest> T setParamObject(Object... params) {
         JsonObject obj = toJsonObject(params);
         setValue(KEY_PARAMS, obj);
-        return this;
+        return cast();
     }
 
     /**
@@ -157,9 +176,9 @@ public class RpcRequest extends RpcObject {
      * @param value the parameter value
      * @return this object
      */
-    public RpcRequest setParams(JsonValue value) {
+    public <T extends RpcRequest> T setParams(JsonValue value) {
         setValue(KEY_PARAMS, value);
-        return this;
+        return cast();
     }
 
     /**
@@ -168,14 +187,9 @@ public class RpcRequest extends RpcObject {
      * @param params parameter values to set
      * @return this object
      */
-    public RpcRequest setParams(Object... params) {
+    public <T extends RpcRequest> T setParams(Object... params) {
         setValue(KEY_PARAMS, params);
-        return this;
-    }
-
-    @Override
-    public RpcRequest setVersion(String version) {
-        return (RpcRequest) super.setVersion(version);
+        return cast();
     }
 
 }

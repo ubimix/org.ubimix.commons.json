@@ -45,9 +45,9 @@ public class RpcDispatcherTest extends TestCase {
         String lastName = "Smith";
         int age = 38;
         RpcRequest request = new RpcRequest()
-            .setId(123)
-            .setMethod(method)
-            .setParamObject(
+            .<RpcRequest> setId(123)
+            .<RpcRequest> setMethod(method)
+            .<RpcRequest> setParamObject(
                 "firstName",
                 firstName,
                 "lastName",

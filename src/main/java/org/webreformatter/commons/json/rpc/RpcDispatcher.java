@@ -26,11 +26,10 @@ public class RpcDispatcher implements IRpcCallHandler {
     public RpcDispatcher() {
         this(new IRpcCallHandler() {
             public void handle(RpcRequest request, IRpcCallback rpcCallback) {
-                RpcResponse response = new RpcResponse()
-                    .setId(request.getId())
-                    .setError(
-                        RpcError.ERROR_METHOD_NOT_FOUND,
-                        "Method not found");
+                RpcResponse response = new RpcResponse().<RpcResponse> setId(
+                    request.getId()).<RpcResponse> setError(
+                    RpcError.ERROR_METHOD_NOT_FOUND,
+                    "Method not found");
                 rpcCallback.finish(response);
             }
         });

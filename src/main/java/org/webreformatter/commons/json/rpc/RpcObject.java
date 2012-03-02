@@ -4,7 +4,10 @@ import org.webreformatter.commons.json.JsonObject;
 
 /**
  * Common superclass for RPC request and response objects. It contains common
- * fields such as call identifier and RPC version number.
+ * fields such as call identifier and RPC version number. The
+ * {@link #toRpcObject(JsonObject)} method could be used to analyze a
+ * {@link JsonObject} instance and transform it to a {@link RpcRequest} or a
+ * {@link RpcResponse}.
  * 
  * @author kotelnikov
  * @see http://groups.google.com/group/json-rpc/web/json-rpc-2-0
@@ -25,6 +28,25 @@ public abstract class RpcObject extends JsonObject {
      * The key of the RPC version number.
      */
     public static final String KEY_VERSION = "jsonrpc";
+
+    /**
+     * This method analyzes the given JSON object and transforms it to a request
+     * ({@link RpcRequest}) or to a response ({@link RpcResponse}) instance.
+     * 
+     * @param obj the object to interpret as a RPC request or a response.
+     * @return an {@link RpcRequest} or a {@link RpcResponse} instance; or
+     *         <code>null</code> if the given object can not be interpreted as
+     *         an Rpc object.
+     */
+    public static RpcObject toRpcObject(JsonObject obj) {
+        RpcObject result = null;
+        if (RpcResponse.isRpcResponse(obj)) {
+            result = RpcResponse.FACTORY.newValue(obj);
+        } else if (RpcRequest.isRpcRequest(obj)) {
+            result = RpcRequest.FACTORY.newValue(obj);
+        }
+        return result;
+    }
 
     /**
      * Default constructor.
@@ -52,11 +74,21 @@ public abstract class RpcObject extends JsonObject {
     }
 
     /**
+     * Returns this instance casted to a specific sub-type
+     * 
+     * @return this instance casted to a specified type
+     */
+    @SuppressWarnings("unchecked")
+    protected <T extends RpcObject> T cast() {
+        return (T) this;
+    }
+
+    /**
      * Returns the unique identifier of this call. It could be <code>null</code>
      * for notification calls.
      * 
      * @return the unique identifier of this call. It could be <code>null</code>
-     *         .
+     *         for notification calls.
      */
     public Object getId() {
         return getValue(KEY_ID, NULL_FACTORY);
@@ -67,7 +99,7 @@ public abstract class RpcObject extends JsonObject {
      * <code>null</code> for notification calls.
      * 
      * @return the unique identifier of this call. It could be <code>null</code>
-     *         .
+     *         for notification calls.
      */
     public String getIdAsString() {
         Object id = getId();
@@ -91,9 +123,9 @@ public abstract class RpcObject extends JsonObject {
      * @param id a unique identifier of this call
      * @return this object
      */
-    public RpcObject setId(Object id) {
+    public <T extends RpcObject> T setId(Object id) {
         setValue(KEY_ID, id);
-        return this;
+        return cast();
     }
 
     /**
@@ -103,9 +135,9 @@ public abstract class RpcObject extends JsonObject {
      * @param version the version of the RPC protocol.
      * @return this object
      */
-    public RpcObject setVersion(String version) {
+    public <T extends RpcObject> T setVersion(String version) {
         setValue(KEY_VERSION, version);
-        return this;
+        return cast();
     }
 
 }
