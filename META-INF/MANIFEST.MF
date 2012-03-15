@@ -8,4 +8,5 @@ Bundle-ManifestVersion: 2
 Bundle-Description: JSON Library
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
 Export-Package: org.webreformatter.commons.json;version="1.1.5",
+ org.webreformatter.commons.json.ext;version="1.1.5",
  org.webreformatter.commons.json.rpc;version="1.1.5"

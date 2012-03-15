@@ -40,10 +40,12 @@ public abstract class RpcObject extends JsonObject {
      */
     public static RpcObject toRpcObject(JsonObject obj) {
         RpcObject result = null;
-        if (RpcResponse.isRpcResponse(obj)) {
-            result = RpcResponse.FACTORY.newValue(obj);
-        } else if (RpcRequest.isRpcRequest(obj)) {
-            result = RpcRequest.FACTORY.newValue(obj);
+        if (obj != null) {
+            if (RpcResponse.isRpcResponse(obj)) {
+                result = RpcResponse.FACTORY.newValue(obj);
+            } else if (RpcRequest.isRpcRequest(obj)) {
+                result = RpcRequest.FACTORY.newValue(obj);
+            }
         }
         return result;
     }

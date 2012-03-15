@@ -40,6 +40,9 @@ public class RpcResponse extends RpcObject {
      *         RPC response.
      */
     public static boolean isRpcResponse(JsonObject obj) {
+        if (obj == null) {
+            return false;
+        }
         Object id = obj.getObject(KEY_ID, JsonValue.NULL_FACTORY);
         boolean result = false;
         if (id != null) {
