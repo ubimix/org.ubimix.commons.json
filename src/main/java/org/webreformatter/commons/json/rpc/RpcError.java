@@ -74,6 +74,54 @@ public class RpcError extends JsonObject {
     public static final String KEY_MESSAGE = "message";
 
     /**
+     * Creates and returns a new {@link RpcError} instance using the information
+     * from the given exception
+     * 
+     * @param code the code of the error to set
+     * @param t the exception used as a source of information for the resulting
+     *        error object
+     * @return an {@link RpcError} instance filled with the information from the
+     *         given exception (or error)
+     */
+    public static RpcError getError(int code, Throwable t) {
+        RpcError error = new RpcError();
+        StringBuilder buf = new StringBuilder();
+        StackTraceElement[] stackTrace = t.getStackTrace();
+        for (StackTraceElement e : stackTrace) {
+            buf.append("\n  ");
+            buf.append(e.getClassName()
+                + "#"
+                + e.getMethodName()
+                + " ("
+                + e.getFileName()
+                + ":"
+                + e.getLineNumber()
+                + ")");
+            buf.append(e);
+        }
+        buf.append("\n");
+        error
+            .setValue("code", code)
+            .setValue("message", t.getMessage())
+            .setValue("stackTrace", buf.toString());
+        return error;
+    }
+
+    /**
+     * Creates and returns a new {@link RpcError} instance using the information
+     * from the given exception. This method sets the
+     * {@link RpcError#ERROR_INTERNAL_ERROR} internal error code.
+     * 
+     * @param t the exception used as a source of information for the resulting
+     *        error object
+     * @return an {@link RpcError} instance filled with the information from the
+     *         given exception (or error)
+     */
+    public static RpcError getError(Throwable t) {
+        return getError(RpcError.ERROR_INTERNAL_ERROR, t);
+    }
+
+    /**
      * 
      */
     public RpcError() {
