@@ -11,7 +11,7 @@ public class DateFormatter {
 
     // "yyyy.MM.dd G 'at' HH:mm:ss z" 2001.07.04 AD at 12:08:56 PDT
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-        "yyyy-MM-dd'T'HH:mm:ss'Z'");
+        "yyyy-MM-dd'T'HH:mm:ssZ");
 
     static {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
