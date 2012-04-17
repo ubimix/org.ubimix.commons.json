@@ -138,7 +138,7 @@ public class JsonObject extends JsonValue {
      */
     public boolean getBoolean(String name, boolean defaultValue) {
         Object value = get(name, JsonType.BOOLEAN);
-        return fAccessor.toBoolean(value);
+        return value != null ? fAccessor.toBoolean(value) : defaultValue;
     }
 
     /**
@@ -151,7 +151,7 @@ public class JsonObject extends JsonValue {
      */
     public double getDouble(String name, double defaultValue) {
         Object value = get(name, JsonType.DOUBLE);
-        return fAccessor.toDouble(value);
+        return value != null ? fAccessor.toDouble(value) : defaultValue;
     }
 
     /**
@@ -164,7 +164,7 @@ public class JsonObject extends JsonValue {
      */
     public int getInteger(String name, int defaultValue) {
         Object value = get(name, JsonType.INTEGER);
-        return fAccessor.toInteger(value);
+        return value != null ? fAccessor.toInteger(value) : defaultValue;
     }
 
     /**
@@ -200,7 +200,7 @@ public class JsonObject extends JsonValue {
      */
     public long getLong(String name, long defaultValue) {
         Object value = get(name, JsonType.LONG);
-        return fAccessor.toLong(value);
+        return value != null ? fAccessor.toLong(value) : defaultValue;
     }
 
     /**
