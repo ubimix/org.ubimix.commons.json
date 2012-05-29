@@ -1,19 +1,15 @@
 /* ************************************************************************** *
  * See the NOTICE file distributed with this work for additional information
- * regarding copyright ownership.
- * 
- * This file is licensed to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- * ************************************************************************** */
+ * regarding copyright ownership. This file is licensed to you under the Apache
+ * License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * **************************************************************************
+ */
 package org.webreformatter.commons.json;
 
 import java.util.Stack;
@@ -117,6 +113,12 @@ public class JsonParserTest extends TestCase {
     }
 
     public void test() {
+        test("{\"a\":{\n},\n\"b\":\"C\"\n}", ""
+            + "{"
+            + "<a>{}</a>,"
+            + "<b>C</b>"
+            + "}");
+
         // Check that "null" values are accepted
         test("{a:null}", "{<a>null</a>}");
         test("{a:,b:x,c:}", "{<a></a>,<b>x</b>,<c></c>}");
@@ -183,6 +185,20 @@ public class JsonParserTest extends TestCase {
         test(
             "{ hello\\ world : Value with the '\\:' sign. }",
             "{<hello world>Value with the ':' sign.</hello world>}");
+
+        test("{\n"
+            + "  \"jsonrpc\":\"2.0\",\n"
+            + "  \"id\":\"123\",\n"
+            + "  \"params\":{\n"
+            + "  },\n"
+            + "  \"method\":\"testJsonRpcCall\"\n"
+            + "}", ""
+            + "{"
+            + "<jsonrpc>2.0</jsonrpc>,"
+            + "<id>123</id>,"
+            + "<params>{}</params>,"
+            + "<method>testJsonRpcCall</method>"
+            + "}");
     }
 
     private void test(String str, String control) {
