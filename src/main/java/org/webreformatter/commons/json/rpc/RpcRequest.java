@@ -1,5 +1,6 @@
 package org.webreformatter.commons.json.rpc;
 
+import org.webreformatter.commons.json.IJsonAccessor.JsonType;
 import org.webreformatter.commons.json.JsonArray;
 import org.webreformatter.commons.json.JsonObject;
 import org.webreformatter.commons.json.JsonValue;
@@ -104,13 +105,17 @@ public class RpcRequest extends RpcObject {
      * @return method parameters as an array.
      */
     public JsonArray getParamsAsArray() {
-        JsonValue value = getParams();
-        if (value instanceof JsonArray) {
-            return (JsonArray) value;
-        }
-        JsonArray array = new JsonArray();
-        array.addValue(value);
-        return array;
+        JsonArray value = getParams(new IJsonValueFactory<JsonArray>() {
+            public JsonArray newValue(Object object) {
+                JsonArray result = null;
+                JsonType type = fAccessor.getType(object);
+                if (type == JsonType.ARRAY) {
+                    result = new JsonArray().setJsonObject(object);
+                }
+                return result;
+            }
+        });
+        return value;
     }
 
     /**
@@ -120,17 +125,23 @@ public class RpcRequest extends RpcObject {
      * @return method parameters as an object.
      */
     public JsonObject getParamsAsObject() {
-        JsonValue value = getParams();
-        if (value instanceof JsonObject) {
-            return (JsonObject) value;
-        }
-        if (value instanceof JsonArray) {
-            JsonArray array = (JsonArray) value;
-            if (array.getSize() == 1) {
-                return array.getObject(0, JsonObject.FACTORY);
+        JsonObject value = getParams(new IJsonValueFactory<JsonObject>() {
+            public JsonObject newValue(Object object) {
+                JsonObject result = null;
+                JsonType type = fAccessor.getType(object);
+                if (type == JsonType.ARRAY) {
+                    int size = fAccessor.getArraySize(object);
+                    if (size == 1) {
+                        Object n = fAccessor.getArrayValue(object, 0);
+                        result = this.newValue(n);
+                    }
+                } else if (type == JsonType.OBJECT) {
+                    result = new JsonObject().setJsonObject(object);
+                }
+                return result;
             }
-        }
-        return null;
+        });
+        return value;
     }
 
     /**
