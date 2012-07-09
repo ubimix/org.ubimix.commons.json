@@ -235,7 +235,7 @@ public class JsonObject extends JsonValue {
      * @return the specified property as a string.
      */
     public String getString(String name) {
-        Object value = get(name, JsonType.STRING);
+        Object value = getValue(name);
         return fAccessor.toString(value);
     }
 
