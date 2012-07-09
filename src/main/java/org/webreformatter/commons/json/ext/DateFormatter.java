@@ -2,6 +2,7 @@ package org.webreformatter.commons.json.ext;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -11,7 +12,8 @@ public class DateFormatter {
 
     // "yyyy.MM.dd G 'at' HH:mm:ss z" 2001.07.04 AD at 12:08:56 PDT
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-        "yyyy-MM-dd'T'HH:mm:ssZ");
+        "yyyy-MM-dd'T'HH:mm:ssZ",
+        Locale.UK);
 
     static {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
