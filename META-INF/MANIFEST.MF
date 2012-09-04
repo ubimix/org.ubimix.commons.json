@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ClassPath: .
-Bundle-SymbolicName: org.webreformatter.commons.json
-Bundle-Name: org.webreformatter.commons.json
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Bundle-Version: 1.1.5
+Bundle-SymbolicName: org.ubimix.commons.json
+Bundle-Name: org.ubimix.commons.json
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Version: 1.2.1
 Bundle-ManifestVersion: 2
 Bundle-Description: JSON Library
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
-Export-Package: org.webreformatter.commons.json;version="1.1.5",
- org.webreformatter.commons.json.ext;version="1.1.5",
- org.webreformatter.commons.json.rpc;version="1.1.5"
+Export-Package: org.ubimix.commons.json;version="1.2.1",
+ org.ubimix.commons.json.ext;version="1.2.1",
+ org.ubimix.commons.json.rpc;version="1.2.1"
