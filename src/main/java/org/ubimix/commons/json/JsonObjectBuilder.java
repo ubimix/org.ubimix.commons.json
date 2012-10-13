@@ -3,7 +3,6 @@
  */
 package org.ubimix.commons.json;
 
-
 /**
  * This class is used to convert JSON to Java objects and vice versa.
  * 

@@ -16,11 +16,6 @@
  * ************************************************************************** */
 package org.ubimix.commons.json;
 
-import org.ubimix.commons.json.IJsonListener;
-import org.ubimix.commons.json.JsonHelper;
-import org.ubimix.commons.json.JsonParser;
-import org.ubimix.commons.json.JsonSerializer;
-
 import junit.framework.TestCase;
 
 /**
